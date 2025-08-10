@@ -1,0 +1,98 @@
+# Docker Compose版本定义
+version: '3.8'
+
+# 服务定义部分
+services:
+  # Redis主节点服务配置
+  redis-master:
+    # 使用Redis Alpine镜像，轻量且安全
+    image: redis:alpine
+    # 容器名称设置为redis-master
+    container_name: redis-master
+    # 重启策略：容器退出时总是重启
+    restart: always
+    # 端口映射配置，将主机的6379端口映射到容器的6379端口
+    ports:
+      - "6379:6379"
+    # 数据卷挂载配置
+    volumes:
+      # 挂载主节点Redis配置文件到容器内
+      - ./master/redis.conf:/usr/local/etc/redis/redis.conf
+      # 挂载主节点数据目录到容器内，实现数据持久化
+      - ./data/master:/data
+    # 容器启动时执行的命令，使用指定配置文件启动Redis服务
+    command: redis-server /usr/local/etc/redis/redis.conf
+    # 网络配置，指定容器连接的网络
+    networks:
+      - redis-network
+    # 健康检查配置，用于检查容器内服务是否正常运行
+    healthcheck:
+      # 健康检查命令，使用redis-cli客户端发送ping命令，-a参数指定认证密码
+      test: ["CMD", "redis-cli", "-a", "redis@123", "ping"]
+      # 健康检查间隔时间
+      interval: 10s
+      # 健康检查超时时间
+      timeout: 5s
+      # 健康检查重试次数
+      retries: 3
+
+  # Redis从节点1服务配置
+  redis-slave1:
+    # 使用Redis Alpine镜像
+    image: redis:alpine
+    # 容器名称设置为redis-slave1
+    container_name: redis-slave1
+    # 重启策略：容器退出时总是重启
+    restart: always
+    # 端口映射配置，将主机的6380端口映射到容器的6379端口
+    ports:
+      - "6380:6379"
+    # 数据卷挂载配置
+    volumes:
+      # 挂载从节点1的Redis配置文件到容器内
+      - ./slave1/redis.conf:/usr/local/etc/redis/redis.conf
+      # 挂载从节点1数据目录到容器内，实现数据持久化
+      - ./data/slave1:/data
+    # 容器启动时执行的命令，使用指定配置文件启动Redis服务
+    command: redis-server /usr/local/etc/redis/redis.conf
+    # 依赖关系配置，确保在redis-master服务健康运行后再启动此服务
+    depends_on:
+      redis-master:
+        condition: service_healthy
+    # 网络配置，指定容器连接的网络
+    networks:
+      - redis-network
+
+  # Redis从节点2服务配置
+  redis-slave2:
+    # 使用Redis Alpine镜像
+    image: redis:alpine
+    # 容器名称设置为redis-slave2
+    container_name: redis-slave2
+    # 重启策略：容器退出时总是重启
+    restart: always
+    # 端口映射配置，将主机的6381端口映射到容器的6379端口
+    ports:
+      - "6381:6379"
+    # 数据卷挂载配置
+    volumes:
+      # 挂载从节点2的Redis配置文件到容器内
+      - ./slave2/redis.conf:/usr/local/etc/redis/redis.conf
+      # 挂载从节点2数据目录到容器内，实现数据持久化
+      - ./data/slave2:/data
+    # 容器启动时执行的命令，使用指定配置文件启动Redis服务
+    command: redis-server /usr/local/etc/redis/redis.conf
+    # 依赖关系配置，确保在redis-master服务健康运行后再启动此服务
+    depends_on:
+      redis-master:
+        condition: service_healthy
+    # 网络配置，指定容器连接的网络
+    networks:
+      - redis-network
+
+# 网络定义部分
+networks:
+  # 自定义网络名称
+  redis-network:
+    # 网络驱动类型，使用桥接网络实现容器间通信
+    driver: bridge

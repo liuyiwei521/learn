@@ -1,0 +1,17 @@
+# redis
+
+#
+from redis:latest
+
+#工作目录
+WORKDIR /data
+
+# 配置文件
+
+COPY redis.conf /data/redis.conf
+
+# 暴露端口
+EXPOSE 6379
+# 启动 redis
+# CMD ["redis-server", "/data/redis.conf"]
+CMD ["redis-server"]
