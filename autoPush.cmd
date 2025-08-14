@@ -67,7 +67,7 @@ if %errorlevel% equ 0 (
     if %errorlevel% equ 0 (
         echo - 没有需要提交的更改，操作结束
         pause
-     
+
     )
     pause
 
