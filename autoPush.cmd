@@ -67,7 +67,7 @@ if %errorlevel% equ 0 (
     if %errorlevel% equ 0 (
         echo - 没有需要提交的更改，操作结束
         pause
-        exit /b 0
+     
     )
     pause
 
@@ -160,6 +160,7 @@ if %errorlevel% equ 0 (
     pause
 )
 
+:continue_processing
 echo.
 echo ==============================================
 echo 脚本执行完毕
