@@ -108,7 +108,18 @@ if %errorlevel% equ 0 (
     echo.
     echo 【步骤6/9】生成新分支名称（基于当前时间）
     for /f "tokens=2 delims==" %%a in ('wmic OS Get localdatetime /value') do set "dt=%%a"
-    set "BRANCH_NAME=auto-conflict-%dt:~0,8%-%dt:~8,6%"
+    :: 检查是否成功获取时间
+    if "!dt!"=="" (
+        :: 如果wmic方法失败，使用备用方法
+        set "BRANCH_NAME=auto-conflict-%date:~0,4%%date:~5,2%%date:~8,2%-%time:~0,2%%time:~3,2%%time:~6,2%"
+        :: 清理时间字符串中的空格和特殊字符
+        set "BRANCH_NAME=!BRANCH_NAME: =0!"
+        set "BRANCH_NAME=!BRANCH_NAME:/=!"
+        set "BRANCH_NAME=!BRANCH_NAME:.=!"
+        set "BRANCH_NAME=!BRANCH_NAME::-=!"
+    ) else (
+        set "BRANCH_NAME=auto-conflict-!dt:~0,8!-!dt:~8,6!"
+    )
     echo - 生成的分支名: !BRANCH_NAME!
     pause
 
@@ -130,7 +141,7 @@ if %errorlevel% equ 0 (
     echo 【步骤8/9】提交更改到新分支
     echo - 执行命令: git add .
     git add .
-    echo - 执行命令: git commit -m "Conflict branch: !BRANCH_NAME! - %date% %time%"
+
     git commit -m "Conflict branch: !BRANCH_NAME! - %date% %time%"
     echo - 提交结果代码: %errorlevel%（0=成功）
     if %errorlevel% neq 0 (
