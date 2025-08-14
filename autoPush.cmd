@@ -63,11 +63,12 @@ if %errorlevel% equ 0 (
     echo.
     echo 【步骤6/9】检查暂存区是否有更改
     git diff --quiet --cached
-    echo - 检查结果代码: %errorlevel%（0=无更改，1=有更改）
-    if %errorlevel% equ 0 (
+    set "HAS_CHANGES=%errorlevel%"
+    echo - 检查结果代码: %HAS_CHANGES%（0=无更改，1=有更改）
+    if "%HAS_CHANGES%"=="0" (
         echo - 没有需要提交的更改，操作结束
         pause
-
+        goto continue_processing
     )
     pause
 
@@ -93,7 +94,11 @@ if %errorlevel% equ 0 (
     if %errorlevel% equ 0 (
         echo - 推送成功完成
     ) else (
-        echo 错误：推送失败
+        echo 错误：推送失败，可能因为包含敏感信息或网络问题
+        echo 请检查:
+        echo 1. 是否在提交中包含了个人访问令牌等敏感信息
+        echo 2. 网络连接是否正常
+        echo 3. 是否有推送权限
         pause
         exit /b 1
     )
@@ -159,6 +164,10 @@ if %errorlevel% equ 0 (
     echo - 推送结果代码: %errorlevel%（0=成功）
     if %errorlevel% neq 0 (
         echo 错误：推送新分支失败
+        echo 可能原因:
+        echo 1. 包含敏感信息（如个人访问令牌）
+        echo 2. 网络连接问题
+        echo 3. 推送权限问题
         pause
         exit /b 1
     )
