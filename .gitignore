@@ -1,0 +1,55 @@
+# Maven build directory
+target/
+**/target/
+
+# Gradle build directory
+.gradle/
+**/.gradle/
+
+# IDE specific files
+.idea/
+**/.idea/
+.vscode/
+**/.vscode/
+
+# Eclipse
+.classpath
+.project
+.settings/
+**/.classpath
+**/.project
+**/.settings/
+
+# IntelliJ IDEA
+*.iml
+*.iws
+out/
+**/out/
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+**/nbproject/private/
+**/build/
+**/nbbuild/
+**/dist/
+**/nbdist/
+
+# OS generated files
+Thumbs.db
+.DS_Store
+**/Thumbs.db
+**/.DS_Store
+
+# Log files
+*.log
+**/*.log
+
+# Redis dump files
+dump.rdb
+appendonly.aof
+**/dump.rdb
+**/appendonly.aof
