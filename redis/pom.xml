@@ -11,6 +11,7 @@
     <modules>
         <module>Jedis</module>
         <module>hm-dianping</module>
+        <module>springboot_redis</module>
     </modules>
 
 
