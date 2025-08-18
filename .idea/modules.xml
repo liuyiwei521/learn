@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/learn.iml" filepath="$PROJECT_DIR$/learn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/redis.iml" filepath="$PROJECT_DIR$/redis.iml" />
       <module fileurl="file://$PROJECT_DIR$/vueblog/vueblog.iml" filepath="$PROJECT_DIR$/vueblog/vueblog.iml" />
       <module fileurl="file://$PROJECT_DIR$/webpack_learn/webpack_learn.iml" filepath="$PROJECT_DIR$/webpack_learn/webpack_learn.iml" />
     </modules>
